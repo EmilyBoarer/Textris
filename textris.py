@@ -116,17 +116,23 @@ class Shape:
             self.adj = temp
         self.showingrid()
     def side(self, dx):
+        self.removefromgrid()
         move = True
         for a in self.adj+[(0,0)]:
-            x = self.x+a[0]
-            if dx > 0 and x == WIDTH-1: # moving right
+            x = self.x+a[0]+dx
+            y = self.y+a[1]
+            print(x, y)
+            if x > WIDTH-1: # moving right
                 move = False
-            if dx < 0 and x == 0:
+            elif x < 0:
+                move = False
+            elif y > HEIGHT-1 and y < 0:
+                move = False
+            elif not type(grid[y][x]) == EmptySquare: # if the target square is already occupied
                 move = False
         if move:
-            self.removefromgrid()
             self.x += dx
-            self.showingrid()
+        self.showingrid()
 
 tetrominoes = [
     ([(-1,0),(1,0),(2,0)],CYAN),
@@ -160,7 +166,7 @@ display()
 
 running = True
 while running: # mainloop
-    m = input("Press Enter to drop, Space followed by Enter to rotate, A then Enter to move to the left, and D then Enter to the right")
+    m = input("Enter Command: ")#"Press Enter to drop, Space followed by Enter to rotate, A then Enter to move to the left, and D then Enter to the right")
     if m == " ":
         s.rotate()
     elif m.lower() == "a":
